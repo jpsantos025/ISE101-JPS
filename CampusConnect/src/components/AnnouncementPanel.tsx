@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import type { Announcement } from '../../types/announcement';
 import AnnouncementCard from './AnnouncementCard';
 
@@ -44,15 +44,21 @@ export default function AnnouncementPanel() {
       <Text style={styles.heading}>Campus Announcements</Text>
       <Text style={styles.counter}>Unread Announcements: {unreadAnnouncements.length}</Text>
 
-      {announcements.map((announcement) => (
-        <AnnouncementCard
-          key={announcement.id}
-          title={announcement.title}
-          category={announcement.category}
-          read={announcement.read}
-          onMarkRead={() => toggleAnnouncementRead(announcement.id)}
-        />
-      ))}
+      <FlatList
+        data={announcements}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <AnnouncementCard
+            title={item.title}
+            category={item.category}
+            read={item.read}
+            onMarkRead={() => toggleAnnouncementRead(item.id)}
+          />
+        )}
+        scrollEnabled={false}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.listContent}
+      />
     </View>
   );
 }
@@ -76,5 +82,8 @@ const styles = StyleSheet.create({
     color: '#3B475A',
     marginBottom: 16,
     fontWeight: '600',
+  },
+  listContent: {
+    paddingBottom: 8,
   },
 });

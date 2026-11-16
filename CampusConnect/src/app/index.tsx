@@ -1,7 +1,10 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useRef } from 'react';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import type { Announcement } from '../../types/announcement';
 import { getUnreadAnnouncements } from '../../services/announcementUtils';
+import ActionButton from '../components/ActionButton';
 import AnnouncementPanel from '../components/AnnouncementPanel';
+import SectionHeading from '../components/SectionHeading';
 
 const sampleAnnouncements: Announcement[] = [
   {
@@ -18,27 +21,58 @@ const sampleAnnouncements: Announcement[] = [
   },
 ];
 
+const campusSeal = require('../../assets/images/santa-rita-college-seal.webp');
+
 export default function HomeScreen() {
+  const scrollViewRef = useRef<any>(null);
   const unread = getUnreadAnnouncements(sampleAnnouncements);
+
+  const handleViewAllAnnouncements = () => {
+    scrollViewRef.current?.scrollTo({ y: 520, animated: true });
+  };
 
   return (
     <ScrollView
+      ref={scrollViewRef}
       contentContainerStyle={styles.container}
       showsVerticalScrollIndicator={false}
       bounces={false}
     >
       <View style={styles.contentWrapper}>
-        <Text style={styles.title}>Campus Connect</Text>
+        <SectionHeading
+          title="Campus Connect"
+          subtitle="One campus. Connected students."
+          titleStyle={styles.headingTitle}
+          subtitleStyle={styles.headingSubtitle}
+        />
 
-        <Text style={styles.subtitle}>One campus. Connected students.</Text>
+        <View style={styles.bannerCard}>
+          <Text style={styles.bannerTitle}>Campus Announcements</Text>
+          <Text style={styles.bannerSubtitle}>Stay updated with the latest campus news.</Text>
 
-        <Text style={styles.welcome}>Welcome to the Week 1 project foundation.</Text>
+          <ActionButton
+            label="View All Announcements"
+            onPress={handleViewAllAnnouncements}
+            accessibilityLabel="View all announcements"
+          />
+
+          <Image
+            source={campusSeal}
+            accessibilityLabel="Santa Rita College seal"
+            style={styles.bannerImage}
+            resizeMode="contain"
+          />
+        </View>
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Announcement Utility Test</Text>
+          <SectionHeading
+            title="Announcement Utility Test"
+            subtitle=""
+            titleStyle={styles.sectionTitle}
+            containerStyle={styles.utilityHeading}
+          />
 
           <Text style={styles.info}>Total Announcements: {sampleAnnouncements.length}</Text>
-
           <Text style={styles.info}>Unread Announcements: {unread.length}</Text>
 
           {unread.map((item) => (
@@ -58,30 +92,50 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 48,
+    paddingHorizontal: 18,
+    paddingTop: 32,
     paddingBottom: 32,
     backgroundColor: '#F4F7FB',
   },
   contentWrapper: {
     width: '100%',
-    maxWidth: 480,
+    maxWidth: 500,
   },
-  title: {
-    fontSize: 30,
-    fontWeight: '800',
-    marginBottom: 10,
+  headingTitle: {
+    fontSize: 32,
+    lineHeight: 38,
+  },
+  headingSubtitle: {
+    fontSize: 14,
+    color: '#526070',
+  },
+  bannerCard: {
+    width: '100%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#DCE3EC',
+    padding: 18,
+    marginBottom: 20,
+  },
+  bannerTitle: {
     color: '#111827',
+    fontSize: 24,
+    fontWeight: '800',
+    marginBottom: 6,
   },
-  subtitle: {
+  bannerSubtitle: {
+    color: '#526070',
     fontSize: 14,
-    color: '#334155',
-    marginBottom: 8,
+    marginBottom: 16,
+    lineHeight: 20,
   },
-  welcome: {
-    fontSize: 14,
-    color: '#334155',
-    marginBottom: 24,
+  bannerImage: {
+    width: '100%',
+    height: 180,
+    marginTop: 18,
+    alignSelf: 'center',
+    backgroundColor: '#FFFFFF',
   },
   card: {
     width: '100%',
@@ -92,20 +146,23 @@ const styles = StyleSheet.create({
     borderColor: '#DCE3EC',
     marginBottom: 28,
   },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    marginBottom: 12,
-    color: '#111827',
+  utilityHeading: {
+    marginBottom: 10,
+  },
+  sectionTitle: {
+    fontSize: 22,
+    lineHeight: 28,
   },
   info: {
-    fontSize: 13,
+    fontSize: 14,
     color: '#334155',
-    marginBottom: 4,
+    marginBottom: 6,
+    lineHeight: 20,
   },
   item: {
     fontSize: 13,
     color: '#334155',
     marginTop: 6,
+    lineHeight: 18,
   },
 });

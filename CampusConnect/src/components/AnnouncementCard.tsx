@@ -26,7 +26,9 @@ export default function AnnouncementCard({
 
       <Pressable
         accessibilityRole="button"
+        accessibilityLabel={buttonLabel}
         onPress={onMarkRead}
+        hitSlop={8}
         style={({ pressed }) => [
           styles.button,
           pressed && styles.buttonPressed,
@@ -58,11 +60,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#111827',
     marginBottom: 6,
+    lineHeight: 22,
   },
   category: {
     fontSize: 12,
-    color: '#5B6472',
+    color: '#526070',
     marginBottom: 10,
+    fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
@@ -70,6 +74,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginBottom: 16,
     fontWeight: '600',
+    lineHeight: 18,
   },
   statusRead: {
     color: '#0F766E',
@@ -84,9 +89,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     alignItems: 'center',
     justifyContent: 'center',
+    minHeight: 42,
   },
   buttonPressed: {
-    opacity: 0.88,
+    backgroundColor: '#1D4ED8',
+    transform: [{ scale: 0.99 }],
   },
   buttonText: {
     color: '#FFFFFF',
